@@ -61,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        toolbar.findViewById(R.id.bt_switch).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myCanvasView.setEnabled(!myCanvasView.isEnabled());
+            }
+        });
+
         toolbar.findViewById(R.id.bt_pdf).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -21,13 +21,12 @@ public class SignatureView extends View {
     private Paint mPaint;
     private Path mPath;
     private int mDrawColor;
-    private int mBackgroundColor;
+    private int backgroundColor,enabledBackgroundColor,disabledBackgroundColor;
     private Canvas mExtraCanvas;
     private Bitmap mExtraBitmap;
 
     private float mX, mY;
     private static final float TOUCH_TOLERANCE = 4;
-    private Rect mFrame;
 
     public SignatureView(Context context) {
         super(context);
@@ -45,7 +44,13 @@ public class SignatureView extends View {
     }
 
     private void init(){
-        mBackgroundColor = ResourcesCompat.getColor(getResources(),
+
+        enabledBackgroundColor = ResourcesCompat.getColor(getResources(),
+                R.color.signature_view_bg, null);
+        disabledBackgroundColor = ResourcesCompat.getColor(getResources(),
+                R.color.black_80, null);
+
+        backgroundColor = ResourcesCompat.getColor(getResources(),
                 R.color.signature_view_bg, null);
         mDrawColor = ResourcesCompat.getColor(getResources(),
                 R.color.signature_view_finger, null);
@@ -72,11 +77,8 @@ public class SignatureView extends View {
         // Create bitmap, create canvas with bitmap, fill canvas with color.
         mExtraBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         mExtraCanvas = new Canvas(mExtraBitmap);
-        // Fill the Bitmap with the background color.
-        mExtraCanvas.drawColor(mBackgroundColor);
-        // Calculate the rect a frame around the picture.
-        int inset = 40;
-        mFrame = new Rect(inset, inset, width - inset, height - inset);
+//        // Fill the Bitmap with the background color.
+        mExtraCanvas.drawColor(backgroundColor);
     }
 
     @Override
@@ -84,15 +86,19 @@ public class SignatureView extends View {
         super.onDraw(canvas);
         // Draw the bitmap that stores the path the user has drawn.
 
-        // Draw a frame around the picture.
-        canvas.drawRect(mFrame, mPaint);
-
         // Draw the bitmap that has the saved path.
         canvas.drawBitmap(mExtraBitmap, 0, 0, null);
     }
 
+
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        if(!isEnabled()){
+            return true;
+        }
+
         float x = event.getX();
         float y = event.getY();
 
@@ -152,6 +158,20 @@ public class SignatureView extends View {
     public void clear(){
         mExtraCanvas.drawColor(Color.WHITE);
         invalidate();
+    }
+
+    @Override
+    public void setEnabled(boolean enable){
+
+        super.setEnabled(enable);
+        if(enable)
+            backgroundColor = enabledBackgroundColor;
+        else
+            backgroundColor = disabledBackgroundColor;
+
+        mExtraCanvas.drawColor(backgroundColor);
+
+        this.invalidate();
     }
 
 }

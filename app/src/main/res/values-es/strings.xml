@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Firma</string>
+    <string name="app_name">Firma Electrónica</string>
     <string name="sign_here">Por favor firma aquí</string>
     <string name="image_saved">Imagen guardada en tu directorio de imagenes</string>
     <string name="clear_canvas">Borrar</string>
